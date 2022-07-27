@@ -1,0 +1,26 @@
+                        left	up	down	right
+
+t1	                    palm32	None	None	t2
+t2	                    t1	None	None	None
+ff1	                    mf1	ff2	palm33	None
+ff2	                    mf2	ff3	ff1	None
+ff3	                    mf3	None	ff2	None
+mf1	                    rf1	mf2	palm33; palm23	ff1
+mf2	                    rf2	mf3	mf1	ff2
+mf3	                    rf3	None	mf2	ff3
+rf1	                    p1	rf2	palm13;palm23	mf1
+rf2	                    p2	rf3	rf1	mf2
+rf3	                    None	None	rf2	mf3
+p1	                    None	p2	palm13	rf1
+p2	                    None	None	p1	rf2
+palm11	                None	palm12	None	palm21
+palm12	                s1	palm13	palm11	palm22
+palm13	                None	p1; rf1	palm12	palm23
+palm21	                palm11	palm22	b1	palm31
+palm22	                palm12	palm23	palm21	palm32
+palm23	                palm13	rf1; mf1	palm22	palm33
+palm31              	palm21	palm32	b1	None
+palm32	                palm22	palm33	palm31	t1
+palm33	                palm23	mf1; ff1	palm32	None
+b1	                    None	palm21; palm31	None	None
+s1	                    None	None	None	palm12
