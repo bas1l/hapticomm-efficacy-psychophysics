@@ -8,8 +8,7 @@ from psychopy import core, data, gui
 from pynput import keyboard
 
 from modules.file_management import FileManager
-
-from include.actuators_info import *
+from modules.stimuli import StimuliEfficacy
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(script_path)
@@ -40,9 +39,10 @@ fm.generate_infoFile(expt_info)
 
 # -- SETUP STIMULUS CONTROL --
 n_iteration_per_group = 10
-stim_list = get_stimuli(n_iteration_per_group)
-random.shuffle(stim_list)
-n_trials = len(stim_list)
+s = StimuliEfficacy(n_iteration_per_group)
+s.define_sizes()
+s.define_stimuli()
+n_trials = len(s.stim_list)
 
 # -- SETUP EXPERIMENT CLOCKS --
 expt_clock = core.Clock()
@@ -77,11 +77,19 @@ while stim_no < n_trials:
     # write to data file
     fm.dataWrite([
         stim_no+1,
-        stim_list[stim_no]['type'],
-        stim_list[stim_no]['size'],
-        stim_list[stim_no]['direction'],
-        stim_list[stim_no]['actuators']
+        s.stim_list[stim_no]['type'],
+        s.stim_list[stim_no]['nb_actuators'],
+        s.stim_list[stim_no]['width'],
+        s.stim_list[stim_no]['length'],
+        s.stim_list[stim_no]['actuators']
     ])
+
+    # send command to the AD5383
+    # TODO
+    #  Execute the sequence
+    #   - send the type of contact
+    #   - send the list of actuators
+    #  Wait for the participant's answer (one needs to press [Enter] to continue)
 
     fm.logEvent(
         expt_clock.getTime(),

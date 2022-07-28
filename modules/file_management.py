@@ -13,7 +13,7 @@ class FileManager:
         # initialise files
         try:
             self.dataFile = open(self.data_folder + self.filename_prefix + '_stimuli.csv', 'w')
-            self.dataFile.write('trial;type;size;direction;actuators\n')
+            self.dataFile.write('trial;type;nb_actuators;width;length;actuators\n')
         except IOError:
             input("Could not open" + self.filename_prefix + '_stimuli.csv' + " file!")
         self.dataFile.close()
