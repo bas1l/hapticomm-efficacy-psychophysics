@@ -13,7 +13,7 @@ class FileManager:
         # initialise files
         try:
             self.dataFile = open(self.data_folder + self.filename_prefix + '_stimuli.csv', 'w')
-            self.dataFile.write('trial,type,size,actuators\n')
+            self.dataFile.write('trial;type;size;direction;actuators\n')
         except IOError:
             input("Could not open" + self.filename_prefix + '_stimuli.csv' + " file!")
         self.dataFile.close()
@@ -49,7 +49,7 @@ class FileManager:
         return self
 
     def dataWrite(self, trialData):
-        lineFormatting = ','.join(['{}']*len(trialData))+'\n'
+        lineFormatting = ';'.join(['{}']*len(trialData))+'\n'
         self.dataFile = open(self.data_folder + self.filename_prefix + '_stimuli.csv', 'a')
         self.dataFile.write(lineFormatting.format(*trialData))
         self.dataFile.close()

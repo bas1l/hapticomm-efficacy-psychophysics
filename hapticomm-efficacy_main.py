@@ -11,17 +11,6 @@ from modules.file_management import FileManager
 
 from include.actuators_info import *
 
-
-points = get_random_edged_actuators(10)
-print(points)
-directions = ("left", "up", "down", "right")
-lines = get_random_line(points[0], 2, directions)
-print(lines)
-
-
-
-
-
 script_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(script_path)
 
@@ -31,7 +20,7 @@ expt_info = {
     '02. Participant Code': 'P01',
     '03. Folder for saving data': 'data'
     }
-dlg = gui.DlgFromDict(expt_info, title='Experiment details')
+dlg = gui.DlgFromDict(expt_info, title='Hapticomm Efficacy: psychophysics')
 if dlg.OK:
     pass  # continue
 else:
@@ -50,20 +39,8 @@ fm = FileManager(data_folder+"/"+participant_id, filename_prefix)
 fm.generate_infoFile(expt_info)
 
 # -- SETUP STIMULUS CONTROL --
-contact_types = ['tap', 'tap-and-hold', 'app-motion']
-contact_sizes = ['medium', 'large']
-contact_locations = ['']
-
-n_iteration_per_stim = 10
-stim_list = []
-for t in contact_types:
-    for s in contact_sizes:
-        for n in range(n_iteration_per_stim):
-            stim_list.append({
-                'type': t,
-                'size': s
-                })
-
+n_iteration_per_group = 10
+stim_list = get_stimuli(n_iteration_per_group)
 random.shuffle(stim_list)
 n_trials = len(stim_list)
 
@@ -101,7 +78,9 @@ while stim_no < n_trials:
     fm.dataWrite([
         stim_no+1,
         stim_list[stim_no]['type'],
-        stim_list[stim_no]['size']
+        stim_list[stim_no]['size'],
+        stim_list[stim_no]['direction'],
+        stim_list[stim_no]['actuators']
     ])
 
     fm.logEvent(

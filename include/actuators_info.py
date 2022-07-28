@@ -210,11 +210,15 @@ def get_actuators_id():
     return actuators_id
 
 
+def get_random_actuators(nmax_locations):
+    actID = get_actuators_id()
+    return random.sample(actID, nmax_locations)
+
+
 def get_random_edged_actuators(nmax_locations):
     # return nmax_locations number of random actuator identifiers.
     # It has to be an actuator on the edge of the device to facilitate the apparent motion
 
-    act_neighbours = get_actuators_neighbours()
     actID = get_actuators_id()
     random.sample(actID, len(actID))
 
@@ -228,7 +232,7 @@ def get_random_edged_actuators(nmax_locations):
         if n_locations == nmax_locations:
             return actID_kept
 
-    return []
+    return None
 
 
 def is_contour(actuator_id):
@@ -238,8 +242,8 @@ def is_contour(actuator_id):
     return n["left"] is None or n["up"] is None or n["down"] is None or n["right"] is None
 
 
-def get_random_lines(actIDs):
-    # return a line of actuator identifiers for each actuator identifiers as input
+def get_random_lines(actIDs, directions=("left", "up", "down", "right")):
+    # return a line of actuators for each actuator identifiers as input
     act_lines = []
     len_line_potential = [2, 3]
 
@@ -249,10 +253,10 @@ def get_random_lines(actIDs):
 
         # get all the possible combination to get a line, exit as soon as found one.
         for n_act in len_line_potential:
-            directions = ("left", "up", "down", "right")
-            act_line = get_random_line(a_id, n_act, directions)
+            act_line = get_random_line(a_id, n_act, directions)[0]
+            # if a line has been found, then go to the next location.
             if act_line is not None:
-                break  # if a line has been found, then go to the next location.
+                break
 
         # If one of the starting actuators doesn't work, stops and returns nothing.
         if act_line is None:
@@ -263,41 +267,170 @@ def get_random_lines(actIDs):
 
 
 def get_random_line(a_id_start, nb_act, directions):
-    # return a line of actuator identifiers for the actuator identifier as input
     directions = random.sample(directions, len(directions))
+    # return a line of actuator identifiers for the actuator identifier as input
     for d in directions:
-        res = get_line(a_id_start, nb_act, d)
-        if res is not None:
+        res = get_line_limit(a_id_start, d, nb_act)
+        if res:
             return res, d  # a line has been found so it can exit.
 
-    return None
+    return [], None
 
 
-def get_line(a_id_start, nb_act, direction):
-    act_neighbours = get_actuators_neighbours()
-    a_ids = [a_id_start]
-
-    # store info of the first actuator [id and neighbours]
-    neighbours = act_neighbours[a_id_start]
-
+def get_line_limit(a_id_start, direction, nb_act):
     # check if we can find a line
-    for n_act in range(1, nb_act):
-        n = neighbours[direction]
-        if n is None:
-            return None  # can't find the line, exit without returning anything.
+    line = get_line(a_id_start, direction)
+    if isinstance(line, list) and len(line) >= nb_act:
+        return line[0:nb_act]
 
-        # save the actuator id in this direction
-        if isinstance(n, list):  # therefore there are multiple choices, randomly chose one
-            a_ids.append(random.sample(n, 1)[0])
+    return []
+
+
+def get_line(a_id_start, direction):
+    line = [a_id_start]
+
+    act_neighbours = get_actuators_neighbours()  # get the list of all neighbours
+    neighbours = act_neighbours[a_id_start]  # neighbours of the current actuator
+    n = neighbours[direction]  # targeted neighbour
+
+    # While there is still actuators on the line
+    while n is not None:
+        if isinstance(n, list):  # there are multiple choices, randomly chose one
+            line.append(random.sample(n, 1)[0])
         else:
-            a_ids.append(n)
+            line.append(n)
+        # select the next actuator and neighbours
+        n = act_neighbours[line[-1]][direction]  # jump to the neighbours of the next actuator
 
-        neighbours = act_neighbours[a_ids[n_act]]  # jump to the neighbours of the next actuator
-
-    return a_ids
-
-
+    return line
 
 
+def get_tap_stimuli(n_sequence):
+    points = get_random_actuators(n_sequence)
+    lines = get_random_lines(get_random_actuators(n_sequence))
 
+    return [points, lines]
+
+
+def get_points_slide(n_sequence):
+    actuators = get_actuators_id()
+    actuators = random.sample(actuators, len(actuators))
+
+    lines = []
+    n_found = 0
+
+    for a in actuators:
+        line, d = get_point_slide(a)
+        if len(line):  # if not empty, line has been found
+            lines.append([line, d])
+            n_found += 1
+        if n_found == n_sequence:
+            break
+
+    return lines
+
+
+def get_point_slide(act_start):
+    minimum_len = 3
+    directions = ("up", "down")
+    directions = random.sample(directions, len(directions))
+
+    for d in directions:
+        line = get_line(act_start, d)
+        if isinstance(line, list) and len(line) >= minimum_len:
+            return line, d
+
+    return [], None
+
+
+def get_lines_slide(n_sequence):
+    matrix = []
+    n_lines = 0
+
+    actuators = get_actuators_id()
+    len_line_potential = [2, 3]
+    directions = ("left", "right")  # always horizontal as the motion is vertical
+
+    while n_lines != n_sequence:
+        nb_act = random.sample(len_line_potential, 1)[0]
+        a = random.sample(actuators, 1)[0]
+        line_width, d_width = get_random_line(a, nb_act, directions)
+        # if a line has been found
+        if len(line_width):
+            l_slide, d_motion = get_large_slide(line_width, d_width)
+            if len(l_slide):
+                matrix.append([l_slide, d_motion])
+                n_lines += 1
+
+    return matrix
+
+
+def get_large_slide(acts_start, neighbours_dir):
+    width = len(acts_start)
+    minimum_len = 3
+    directions = ("up", "down")
+    directions = random.sample(directions, len(directions))
+
+    for d in directions:
+        lines = []
+        n_line = 0
+
+        # starts by getting the line for one actuator and check if the width can be satisfied
+        line = get_line(acts_start[0], d)
+        for a in line:
+            # check if the required width can be satisfied
+            line_width = get_line(a, neighbours_dir)
+            # if yes, add the line and go next
+            if isinstance(line_width, list) and len(line_width) >= width:
+                lines.append(line_width[0:width])
+                n_line += 1
+            # if not and minimum length not satisfied, go to the next direction
+            else:
+                break
+
+        # if the minimum length was satisfied, stops searching.
+        if n_line >= minimum_len:
+            return lines, d
+
+    return [], None
+
+
+def get_stimuli(n_iteration_per_group):
+    stim_list = []
+
+    [points, lines] = get_tap_stimuli(n_iteration_per_group)
+    for t in ['tap', 'tap-and-hold']:
+        for point in points:
+            stim_list.append({
+                'type': t,
+                'size': 'point',
+                'direction': "None",
+                'actuators': point
+            })
+        for line in lines:
+            stim_list.append({
+                'type': t,
+                'size': 'line',
+                'direction': "None",
+                'actuators': line
+            })
+
+    lines = get_points_slide(n_iteration_per_group)
+    for line, direction in lines:
+        stim_list.append({
+            'type': "app-motion",
+            'size': 'point',
+            'direction': direction,
+            'actuators': line
+        })
+    matrices = get_lines_slide(n_iteration_per_group)
+    for matrix, direction in matrices:
+        stim_list.append({
+            'type': "app-motion",
+            'size': 'line',
+            'direction': direction,
+            'actuators': matrix
+        })
+
+    return stim_list
 

@@ -29,7 +29,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/sandbox.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.sandbox">
+  <component name="RunManager" selected="Python.hapticomm-efficacy_main">
     <configuration name="hapticomm-efficacy_main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="hapticomm-efficacy-psychophysics" />
       <option name="INTERPRETER_OPTIONS" value="" />
