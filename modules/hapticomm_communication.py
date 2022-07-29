@@ -41,21 +41,22 @@ def format_stimulus(motion, width, length, actuators):
 
 class HapticommSocket:
 
-    def __init__(self, local_path="/../../../AD5383_driver/build/bin/"):
+    def __init__(self, local_path="/../build/bin/"):
         self.hapticommDriver_path = str(pathlib.Path(__file__).parent.resolve()) + local_path
         self.p_act_driver = None
-
-        #  Socket to talk to server
-        context = zmq.Context()
-        self.socket = context.socket(zmq.PUB)
-        self.socket.bind("tcp://*:5556")
 
     def __del__(self):
         self.close()
 
     def initialise(self):
         self.neutral()  # initialise the apparatus to neutral
-        self.p_act_driver = Process(target=self.start_hapticomm_driver, args=(self.hapticommDriver_path,))
+        self.p_act_driver = Process(target=self.start_hapticomm_driver)
+        self.p_act_driver.start()
+
+        #  Socket to talk to server
+        context = zmq.Context()
+        self.socket = context.socket(zmq.PUB)
+        self.socket.bind("tcp://*:5556")
 
     # Ensure the resting state (0V) of the actuators
     def neutral(self):
@@ -63,17 +64,12 @@ class HapticommSocket:
 
     # AD3583 driver listening to the socket 5556
     def start_hapticomm_driver(self):
-        subprocess.run([self.hapticommDriver_path + "listener_AD5383"])
+        command = self.hapticommDriver_path + "listener_AD5383"
+        subprocess.run([command])
 
     def send_pattern(self, motion, width, length, actuators):
         instruction = format_stimulus(motion, width, length, actuators)
         self.socket.send(instruction.encode('utf-8'))
 
     def close(self):
-        instruction = "0"
-        for a in range(32):
-            instruction += ",2048"
-        instruction += "\n"
-        for i in range(10):
-            self.socket.send(instruction.encode('utf-8'))
         self.socket.send(SIG_END_PROGRAM)

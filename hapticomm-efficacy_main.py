@@ -4,6 +4,9 @@ import os
 import time
 import random
 
+# RASPBERRY PI 3 AND 4 AUTO-INSTALLATION ISSUE WITH QT4/5
+# https://qengineering.eu/install-qt5-with-opencv-on-raspberry-pi-4.html
+# https://raspberrypi.stackexchange.com/questions/69345/installing-qt-on-raspberry-pi-3
 from psychopy import core, data, gui
 from pynput import keyboard
 

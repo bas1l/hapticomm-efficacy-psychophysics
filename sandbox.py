@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import random
+from time import sleep
 
 from modules.stimuli import StimuliEfficacy
 from modules.hapticomm_communication import HapticommSocket, format_stimulus
@@ -43,11 +44,30 @@ def hapticommSocket_tests(n=0):
             instruction = format_stimulus(stimulus['type'], stimulus['width'], stimulus['length'], stimulus['actuators'])
             print(instruction.encode('utf-8'))
     elif n == 2:
-        pass
+        print("Python")
+        hapticomm = HapticommSocket()
+        hapticomm.initialise()
+
+        s = StimuliEfficacy(10)
+        s.define_sizes()
+        s.define_stimuli()
+        
+        sleep(1)
+        for n in range(10):  #range(s.get_n_stimuli()):
+            stim = s.get_stimulus(n)
+            t = stim['type']
+            width = stim['width']
+            length = stim['length']
+            actuators = stim['actuators']
+            input("Press Enter to send a pattern...")
+            print("\nPython: send_pattern")
+            hapticomm.send_pattern(t, width, length, actuators)
+            sleep(0.5)
+        print("Python: done")
 
 
 if __name__ == '__main__':
-    hapticommSocket_tests(1)
+    hapticommSocket_tests(2)
     # stimuliEfficacy_tests(1)
     # stimuliEfficacy_tests(2)
     # stimuliEfficacy_tests(3)

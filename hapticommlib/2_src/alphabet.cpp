@@ -86,11 +86,50 @@ ALPHABET::getFreqRefresh_mHz()
     return wf->getFreqRefresh_mHz();
 }
 
+/* creation: 2022/07/09
+ * @function: createSymbol
+ * used for the hapticomm efficacy psychophysics experiment
+ * The requirement was to use an 2D array of actuators ID rather than a vector.
+ * @return the intended waveformLetter
+ */
 waveformLetter ALPHABET::createSymbol(std::string motion, std::vector<std::vector<std::string>> actuatorsList2D) {
     waveformLetter wfLetter;  // std::multimap<uint8_t, std::vector<uint16_t>>
     struct motion m = wf->getMotion(motion);
+    struct actuator * act_current = new actuator();
+    std::vector<uint16_t> trajectory;
     
-    return wfLetter
+    int dir, amplmax, amplmin, neutral = 0;
+    
+    std::cout << std::endl << std::endl << "(createSymbol)motion: " << motion << std::endl;
+    for (int len=0; len<actuatorsList2D.size(); len++){
+      for (int w=0; w<actuatorsList2D[0].size(); w++){
+        std::cout << actuatorsList2D[len][w] << ", " << std::flush;
+      }
+      std::cout << std::endl;
+    }
+
+    for(int ll=0; ll<actuatorsList2D.size(); ++ll) {
+        for(int w=0; w<actuatorsList2D[0].size(); ++w) {
+            // extract current actuator's information
+            *act_current = dev->getActuator(actuatorsList2D[ll][w]);
+            dir = act_current->windingDirection;
+            neutral = act_current->vneutral;
+            amplmax = act_current->vmax - neutral;
+            amplmin = neutral - act_current->vmin;
+
+            // define the trajectory for the current line and actuator
+            trajectory.resize(m.data[ll].size());
+            // adapt the trajectory to actuator's characteristics
+            std::transform(m.data[ll].begin(), m.data[ll].end(), trajectory.begin(), 
+                [neutral, amplmax, amplmin, dir](double i){ int ampl = (i<0)?amplmin:amplmax; return (uint16_t)((i*dir*ampl)+neutral); });
+            // save the current trajectory in the waveform
+            wfLetter.insert(waveformLetterPair(act_current->chan, trajectory)); 
+            // clear the trajectory vector for the next actuator
+            trajectory.clear();
+        }
+    }
+    
+    return wfLetter;
 }
 
 

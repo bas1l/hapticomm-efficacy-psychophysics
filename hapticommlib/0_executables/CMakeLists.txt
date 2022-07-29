@@ -5,4 +5,4 @@ cmake_minimum_required(VERSION 2.8)
 ###
 add_subdirectory("demo_standard")
 add_subdirectory("neutral")
-add_subdirectory("test")
+add_subdirectory("listener_for_python")

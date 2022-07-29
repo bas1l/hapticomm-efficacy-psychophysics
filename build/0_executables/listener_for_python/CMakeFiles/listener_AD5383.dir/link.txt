@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -std=c++11 CMakeFiles/listener_AD5383.dir/main.cpp.o -o ../../bin/listener_AD5383   -L/home/pi/Software/hapticomm-efficacy-psychophysics/build  -Wl,-rpath,/home/pi/Software/hapticomm-efficacy-psychophysics/build:/usr/local/lib/arm-linux-gnueabihf -lpthread ../../libhapticomm.a -lncurses /usr/local/lib/arm-linux-gnueabihf/libzmq.so.5.2.5 -lpthread -lrt 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libalphabet.a CMakeFiles/alphabet.dir/2_src/alphabet.cpp.o
+/usr/bin/ranlib libalphabet.a

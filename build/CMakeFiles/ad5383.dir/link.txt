@@ -1,0 +1,2 @@
+/usr/bin/ar qc libad5383.a CMakeFiles/ad5383.dir/2_src/ad5383.cpp.o
+/usr/bin/ranlib libad5383.a

@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -std=c++11 -O2 -g -DNDEBUG -rdynamic CMakeFiles/demo.dir/demo.cpp.o -o demo  -lpthread -lncurses ../../libhapticomm.a 

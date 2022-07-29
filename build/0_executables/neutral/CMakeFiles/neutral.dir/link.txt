@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -std=c++11 -rdynamic CMakeFiles/neutral.dir/neutral.cpp.o -o ../../bin/neutral  ../../libad5383.a 
