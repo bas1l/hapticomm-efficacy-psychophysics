@@ -1,2 +1,0 @@
-/usr/bin/ar qc libwaveform.a CMakeFiles/waveform.dir/2_src/waveform.cpp.o
-/usr/bin/ranlib libwaveform.a

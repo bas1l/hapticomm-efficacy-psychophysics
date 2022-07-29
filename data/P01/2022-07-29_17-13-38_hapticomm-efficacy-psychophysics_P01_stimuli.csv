@@ -1,3 +1,0 @@
-trial;type;nb_actuators;width;length;actuators
-1;slide;4;1;4;['mf1', 'palm33', 'palm32', 'palm31']
-2;slide;5;1;5;['ff2', 'mf2', 'mf1', 'rf1', 'p1']

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libaudioFile.a CMakeFiles/audioFile.dir/3_external_lib/AudioFile-master/AudioFile.cpp.o
-/usr/bin/ranlib libaudioFile.a
