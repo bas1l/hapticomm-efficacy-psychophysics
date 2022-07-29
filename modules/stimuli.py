@@ -164,5 +164,8 @@ class StimuliEfficacy:
                 if len(l_slide):
                     return l_slide
 
-    def get_stimuli(self):
-        pass
+    def get_stimulus(self, stimulus_id):
+        return self.stim_list[stimulus_id]
+
+    def get_n_stimuli(self):
+        return len(self.stim_list)

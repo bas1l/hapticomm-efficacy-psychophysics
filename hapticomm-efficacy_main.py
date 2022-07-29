@@ -9,6 +9,7 @@ from pynput import keyboard
 
 from modules.file_management import FileManager
 from modules.stimuli import StimuliEfficacy
+from modules.hapticomm_communication import HapticommSocket
 
 script_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(script_path)
@@ -36,6 +37,10 @@ filename_core = experiment_name + '_' + participant_id
 filename_prefix = date_time + '_' + filename_core
 fm = FileManager(data_folder+"/"+participant_id, filename_prefix)
 fm.generate_infoFile(expt_info)
+
+# -- START COMMUNICATION WITH THE HAPTICOMM --
+hapticomm = HapticommSocket()
+hapticomm.initialise()
 
 # -- SETUP STIMULUS CONTROL --
 n_iteration_per_group = 10
@@ -74,15 +79,16 @@ while stim_no < n_trials:
     while stim_clock.getTime() < 0.05:
         pass
 
+    # current stimulus information
+    stim = s.get_stimulus(stim_no)
+    t = stim['type']
+    n_act = stim['nb_actuators']
+    width = stim['width']
+    length = stim['length']
+    actuators = stim['actuators']
+
     # write to data file
-    fm.dataWrite([
-        stim_no+1,
-        s.stim_list[stim_no]['type'],
-        s.stim_list[stim_no]['nb_actuators'],
-        s.stim_list[stim_no]['width'],
-        s.stim_list[stim_no]['length'],
-        s.stim_list[stim_no]['actuators']
-    ])
+    fm.dataWrite([stim_no+1, t, n_act, width, length, actuators])
 
     # send command to the AD5383
     # TODO
@@ -90,6 +96,8 @@ while stim_no < n_trials:
     #   - send the type of contact
     #   - send the list of actuators
     #  Wait for the participant's answer (one needs to press [Enter] to continue)
+    hapticomm.send_pattern(t, width, length, actuators)
+    input("Press Enter to continue...")
 
     fm.logEvent(
         expt_clock.getTime(),
