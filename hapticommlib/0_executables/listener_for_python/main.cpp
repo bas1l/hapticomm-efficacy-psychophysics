@@ -65,20 +65,21 @@ int main(int argc, char *argv[]) {
   std::vector<std::vector<std::string>> actuatorslist2D;
   std::cout << "AD5383 (hapticomm driver): Listening..." << std::endl;
   while(read_python_command(&subscriber, motion_type, &actuatorslist2D)) {
-    /*
-    std::cout << std::endl << "motion_type: " << motion_type << std::endl;
+    std::cout << "C++: command received: " << std::endl;
+    std::cout << "motion_type: " << motion_type << std::endl;
     for (int len=0; len<actuatorslist2D.size(); len++){
       for (int w=0; w<actuatorslist2D[0].size(); w++){
-        std::cout << actuatorslist2D[len][w] << ", " << std::flush;
+        std::cout << actuatorslist2D[len][w] << std::flush;
+        if (!(w+1 == actuatorslist2D[0].size())) {
+          std::cout << ", " << std::flush;
+        }
       } 
       std::cout << std::endl;
     }
-    */
-    std::cout << "trajectories..." << std::flush;
+    
     trajectories = alph->createSymbol(motion_type, actuatorslist2D);
-    std::cout << "created." << std::endl;
     ad.execute_selective_trajectory(trajectories, durationRefresh_ns);
-    std::cout << "execute_selective_trajectory done." << std::endl;
+    std::cout << "Trajectory done." << std::endl;
   }
 
   for (int security=0; security<10; security++){
@@ -102,9 +103,8 @@ bool read_python_command(zmq::socket_t * sub, std::string & motion_type, std::ve
   msg_str = msg.to_string();
   msg_str.erase(std::remove(msg_str.begin(), msg_str.end(), '\n'), msg_str.cend());
   
-  std::cout << "C++: command received: " << msg_str << std::endl;
-
   if (stop_trigger.compare(msg_str) == 0) {
+    std::cout << "C++: command received: " << msg_str << std::endl;
     return false;
   }
   

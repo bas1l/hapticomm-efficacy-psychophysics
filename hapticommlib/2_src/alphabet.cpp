@@ -100,6 +100,7 @@ waveformLetter ALPHABET::createSymbol(std::string motion, std::vector<std::vecto
     
     int dir, amplmax, amplmin, neutral = 0;
     
+    /*
     std::cout << std::endl << std::endl << "(createSymbol)motion: " << motion << std::endl;
     for (int len=0; len<actuatorsList2D.size(); len++){
       for (int w=0; w<actuatorsList2D[0].size(); w++){
@@ -107,7 +108,7 @@ waveformLetter ALPHABET::createSymbol(std::string motion, std::vector<std::vecto
       }
       std::cout << std::endl;
     }
-
+*/
     for(int ll=0; ll<actuatorsList2D.size(); ++ll) {
         for(int w=0; w<actuatorsList2D[0].size(); ++w) {
             // extract current actuator's information
