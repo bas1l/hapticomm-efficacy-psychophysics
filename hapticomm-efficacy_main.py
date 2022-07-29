@@ -3,6 +3,7 @@
 import os
 import time
 import random
+import sys
 
 # RASPBERRY PI 3 AND 4 AUTO-INSTALLATION ISSUE WITH QT4/5
 # https://qengineering.eu/install-qt5-with-opencv-on-raspberry-pi-4.html
@@ -27,7 +28,7 @@ hapticomm.initialise()
 # -- GET INPUT FROM THE EXPERIMENTER --
 expt_info = {
     '01. Experiment Name': 'hapticomm-efficacy-psychophysics',
-    '02. Participant Code': 'P01',
+    '02. Participant Code': 'P00',
     '03. Folder for saving data': 'data'
     }
 
@@ -36,6 +37,15 @@ date_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 experiment_name = expt_info['01. Experiment Name']
 participant_id = expt_info['02. Participant Code']
 data_folder = expt_info['03. Folder for saving data']
+n_iteration_per_group = 10
+
+
+# -- POTENTIAL ARGUMENT FOR THE PYTHON SCRIPT --
+if len(sys.argv) > 1:
+    participant_id = sys.argv[1]
+if len(sys.argv) > 2:
+    n_iteration_per_group = int(sys.argv[2])
+    
 
 # -- MAKE FOLDER/FILES TO SAVE DATA --
 filename_core = experiment_name + '_' + participant_id
@@ -44,7 +54,6 @@ fm = FileManager(data_folder+"/"+participant_id, filename_prefix)
 fm.generate_infoFile(expt_info)
 
 # -- SETUP STIMULUS CONTROL --
-n_iteration_per_group = 10
 s = StimuliEfficacy(n_iteration_per_group)
 s.define_sizes()
 s.define_stimuli()
