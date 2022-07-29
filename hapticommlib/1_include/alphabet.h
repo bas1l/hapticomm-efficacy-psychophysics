@@ -95,6 +95,7 @@ public :
     void printData(std::string id);
     
     bool insertSymbol(struct symbol s);
+    waveformLetter createSymbol(std::string motion, std::vector<std::vector<std::string>> actuatorsList2D);
     
 private:
     bool configure_letters();

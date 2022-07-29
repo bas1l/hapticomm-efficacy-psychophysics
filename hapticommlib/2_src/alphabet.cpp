@@ -86,6 +86,13 @@ ALPHABET::getFreqRefresh_mHz()
     return wf->getFreqRefresh_mHz();
 }
 
+waveformLetter ALPHABET::createSymbol(std::string motion, std::vector<std::vector<std::string>> actuatorsList2D) {
+    waveformLetter wfLetter;  // std::multimap<uint8_t, std::vector<uint16_t>>
+    struct motion m = wf->getMotion(motion);
+    
+    return wfLetter
+}
+
 
 /* Private :
  * 
@@ -190,7 +197,7 @@ ALPHABET::printData(std::string id)
         data.insert(data.begin(), it->second.begin(), it->second.end());
         
         numSample = data.size();
-        std::cout << "channel nº" << c << "/32, numSample= " << numSample << std::endl; 
+        std::cout << "channel nï¿½" << c << "/32, numSample= " << numSample << std::endl; 
         for(i=0; i<numSample; i++)
         {
             std::cout << std::fixed << data[i] << "; "; 

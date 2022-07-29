@@ -23,4 +23,4 @@ sudo apt-get install -y alsa-utils bison libasound2-dev cmake libncurses5-dev
 # Create binary files
 [ ! -d $buildpath ] && mkdir "$buildpath"
 cd "$buildpath"
-cmake ../libHaptiComm
+cmake ../hapticommlib
