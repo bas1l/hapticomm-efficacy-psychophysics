@@ -1,4 +1,6 @@
 
+from re import L
+from tkinter import W
 from modules.include.actuators_info import *
 import random
 
@@ -9,15 +11,11 @@ class StimuliEfficacy:
     n_it_per_group: int
     neighbours: list
     actuators: list
-    n_patterns = {
-        'small': list,   # 2-4 actuators  :  list of n_shape type
-        'medium': list,  # 5-8 actuators  :  list of n_shape type
-        'large': list    # 9-12 actuators :  list of n_shape type
-    }
+    n_patterns: list   # list of <n_shape type>
     n_shape = {
         'n_actuators': int, # number of actuators
-        'width': list,  # list of [width, length]
-        'length': list  # list of [width, length]
+        'width': list,  # list of <width, length>
+        'length': list  # list of <width, length>
     }
 
     def __init__(self, nb_iteration_per_group):
@@ -27,102 +25,72 @@ class StimuliEfficacy:
         self.directions = get_directions()
         self.stim_types = ["tap", "tap-and-hold", "slide"]
 
-        self.n_patterns['small'] = []
-        self.n_patterns['medium'] = []
-        self.n_patterns['large'] = []
-
+        self.n_patterns = []
         self.stim_list = []
 
-    def get_random_actuators(self, nmax_locations):
-        return random.sample(self.actuators, nmax_locations)
+    def clear_all(self):
+        self.n_patterns.clear()
+        self.stim_list.clear()
 
     def define_sizes(self):
-        # without the prime number 1, 7, 11: Obviously, there are issues when grouping)
-
-        # Small condition (2-4)
+        # The number 1 is ignored as slide cannot be done with one motor.
+        # without the prime number 7, 11: Obviously, there are issues when grouping)
         for i in range(self.n_it_per_group):
-            n_actuators = random.choice([2, 3, 4])
-            if n_actuators == 4 and random.choice([True, False]):
-                # can be a square with 4 actuators.
-                w, l = [2, 2]
+            self.add_shape(random.choice([2, 3, 4]))  # small group
+            self.add_shape(random.choice([5, 6, 8]))  # medium group
+            self.add_shape(random.choice([9, 10, 12]))  # large group
+
+    def add_shape(self, n_actuators):
+        print("n_actuators: ", n_actuators)
+        [n_actuators, w, l] = self.define_shape(n_actuators)
+        self.n_patterns.append({'n_actuators': n_actuators, 'width': w, 'length': l})
+
+    def define_shape(self, n_actuators):
+        n_actuators_max = 12
+        n_length_max = 6
+        n_width_max = 4
+        choices: list = []
+        choice = None
+
+        if not (1 < n_actuators <= n_actuators_max):
+            raise Exception("The required number of actuators should be comprised between 2 and 12.")
+
+        # check all dividend
+        for dividend in range(1, n_length_max):
+            # if the number of actuator can be split with integrity (no half-actuator on a line)
+            if n_actuators%dividend == 0:
+                w = int(n_actuators/dividend)
+                # if the width is comprised within its limit:
+                if w <= n_width_max:
+                    l = dividend
+                    choices.append([n_actuators, w, l])
+
+        choice = random.sample(choices, 1)[0]
+        return choice 
+    
+    def define_stimuli(self, randomize=True):
+        for v in self.n_patterns:
+            n_act = v['n_actuators']
+            w = v['width']
+            l = v['length']
+
+            if w == 1:
+                actuators_list = self.get_path(l)
             else:
-                w, l = [1, n_actuators]
-            shape = {
-                'n_actuators': n_actuators,
-                'width': w,
-                'length': l
-            }
-            self.n_patterns['small'].append(shape)
+                actuators_list = self.get_path_large(w, l)
 
-        # Medium condition (5-8)
-        for i in range(self.n_it_per_group):
-            n_actuators = random.choice([5, 6, 8])
-            if n_actuators == 5:
-                w, l = [1, n_actuators]
-            elif n_actuators == 8:
-                if random.choice([True, False]):
-                    w, l = [2, 4]
-                else:
-                    w, l = [4, 2]
-            elif n_actuators == 6:
-                c = random.choice([1, 2, 3])
-                if c == 1:
-                    w, l = [1, n_actuators]
-                elif c == 2:
-                    w, l = [2, 3]
-                elif c == 3:
-                    w, l = [3, 2]
-
-            shape = {
-                'n_actuators': n_actuators,
-                'width': w,
-                'length': l
-            }
-            self.n_patterns['medium'].append(shape)
-
-        # Large condition (5-8)
-        for i in range(self.n_it_per_group):
-            n_actuators = random.choice([9, 10, 12])
-            if n_actuators == 9:
-                w, l = [3, 3]
-            elif n_actuators == 10:
-                w, l = [2, 5]
-            elif n_actuators == 12:
-                if random.choice([True, False]):
-                    w, l = [3, 4]
-                else:
-                    w, l = [4, 3]
-
-            shape = {
-                'n_actuators': n_actuators,
-                'width': w,
-                'length': l
-            }
-            self.n_patterns['large'].append(shape)
-
-    def define_stimuli(self):
-        for pk, pv in self.n_patterns.items():
-            for v in pv:
-                n_act = v['n_actuators']
-                w = v['width']
-                l = v['length']
-
-                if w == 1:
-                    actuators_list = self.get_path(l)
-                else:
-                    actuators_list = self.get_path_large(w, l)
-
-                # save the pattern for each type of stimulation
-                for t in self.stim_types:
-                    self.stim_list.append({
-                            'type': t,
-                            'nb_actuators': n_act,
-                            'width': w,
-                            'length': l,
-                            'actuators': actuators_list
-                    })
+            # save the pattern for each type of stimulation
+            for t in self.stim_types:
+                self.stim_list.append({
+                        'type': t,
+                        'nb_actuators': n_act,
+                        'width': w,
+                        'length': l,
+                        'actuators': actuators_list
+                })
         # randomize the stimuli
-        self.stim_list = random.sample(self.stim_list, len(self.stim_list))
+        if randomize:
+            self.stim_list = random.sample(self.stim_list, len(self.stim_list))
 
     def get_path(self, length):
         path = []
@@ -169,3 +137,17 @@ class StimuliEfficacy:
 
     def get_n_stimuli(self):
         return len(self.stim_list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

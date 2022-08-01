@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
   // initialise AD5383 driver
   AD5383 ad;
-  waveformLetter trajectories;
+  waveformLetter trajectories; // typedef std::multimap<uint8_t, std::vector<uint16_t>>
   int durationRefresh_ns = (1/(double) alph->getFreqRefresh_mHz()) * ms2ns; // period in nanoseconds
   if (!ad.spi_open()) exit;
   ad.configure();
@@ -65,6 +65,7 @@ int main(int argc, char *argv[]) {
   std::vector<std::vector<std::string>> actuatorslist2D;
   std::cout << "AD5383 (hapticomm driver): Listening..." << std::endl;
   while(read_python_command(&subscriber, motion_type, &actuatorslist2D)) {
+
     std::cout << "C++: command received: " << std::endl;
     std::cout << "motion_type: " << motion_type << std::endl;
     for (int len=0; len<actuatorslist2D.size(); len++){
@@ -78,6 +79,15 @@ int main(int argc, char *argv[]) {
     }
     
     trajectories = alph->createSymbol(motion_type, actuatorslist2D);
+    /*
+    for(const auto &trajIndiv: trajectories) {
+      uint8_t trajName = trajIndiv.first;
+      std::vector<uint16_t> trajVec = trajIndiv.second;
+      std::cout << "Actuator name: " << static_cast<unsigned int>(trajName) << std::endl;
+      std::cout << "Actuator vector size: " << trajVec.size() << std::endl;
+    }
+    */
+
     ad.execute_selective_trajectory(trajectories, durationRefresh_ns);
     std::cout << "Trajectory done." << std::endl;
   }
