@@ -1,6 +1,0 @@
-trial;type;nb_actuators;width;length;actuators
-1;tap;4;1;4;['palm21', 'palm11', 'palm12', 'palm13']
-2;slide;5;1;5;['p2', 'p1', 'rf1', 'palm13', 'palm23']
-3;slide;6;3;2;[['mf2', 'mf1', 'palm23'], ['rf2', 'rf1', 'palm13']]
-4;slide;9;3;3;[['ff3', 'mf3', 'rf3'], ['ff2', 'mf2', 'rf2'], ['ff1', 'mf1', 'rf1']]
-5;tap;10;2;5;[['rf3', 'mf3'], ['rf2', 'mf2'], ['rf1', 'mf1'], ['palm13', 'palm23'], ['palm12', 'palm22']]
