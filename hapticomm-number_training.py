@@ -29,27 +29,42 @@ hapticomm.initialise()
 # -- SETUP STIMULUS CONTROL --
 n_iteration_per_group = 1
 s = StimuliEfficacy(n_iteration_per_group)
-s.add_shape(3) 
-s.define_stimuli(randomize=False)
+s.define_types_motion()
+s.define_numbers()
+s.generate_set_stimuli(randomize=False)
 
-commands = ["q", "a", "z"]
+commands = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # -- ABORT/EXIT ROUTINE --
 def key_press(key):
+    print("key!")
     #if escape is pressed make listening false and exit 
     if key.name == "esc" or key.name == "r":
         keepListening = False
     elif key.name.lower() in commands:
         c = key.name.lower()
-        if c == "q":
+        if c == "0":
             stim = s.get_stimulus(0)
-        elif c == "a":
+        elif c == "1":
             stim = s.get_stimulus(1)
-        elif c == "z":
+        elif c == "2":
             stim = s.get_stimulus(2)
+        elif c == "3":
+            stim = s.get_stimulus(3)
+        elif c == "4":
+            stim = s.get_stimulus(4)
+        elif c == "5":
+            stim = s.get_stimulus(5)
+        elif c == "6":
+            stim = s.get_stimulus(6)
+        elif c == "7":
+            stim = s.get_stimulus(7)
+        elif c == "8":
+            stim = s.get_stimulus(8)
+        elif c == "9":
+            stim = s.get_stimulus(9)
             
         t = stim['type']
-        n_act = stim['nb_actuators']
         width = stim['width']
         length = stim['length']
         actuators = stim['actuators']
@@ -58,36 +73,20 @@ def key_press(key):
         hapticomm.send_pattern(t, width, length, actuators)
         sleep(1.0)
 
-def print_command_info():
-    print("\n---")
-    print("To display a stimulus, press:")
-    print("\t<q> for tap")
-    print("\t<a> for tap-and-hold")
-    print("\t<z> for slide.")
-    print("To change the size of the stimulus: Press [Enter], put a number between 2 and 12, then press [Enter] again.")
-    print("To exit, press <r>.")
-    print("---")
-    
 
 ''' Description:
 '''
 if __name__ == '__main__':
-
-    nb_act = 3
     keyboard.on_press(key_press)   
+    print("\n---")
+    print("Press any number to display its tactile pattern")
+    input("Enter r or <esq> to exit:\n")
 
     # -- MAIN EXPERIMENT LOOP --
     #sleep(0.5)  # let a bit of time for the AD5383 driver to start
     while keepListening:
         pass
-        # send command to the AD5383
-        print_command_info()
-        i = input("Enter another number of actuators (currently " + str(nb_act) + "): ").lower()
-        if i.isnumeric() and 1 < int(i) <= 12:
-            nb_act = int(i)
-            s.clear_all()
-            s.add_shape(nb_act)
-            s.define_stimuli(randomize=False)
+                
         
         
 
