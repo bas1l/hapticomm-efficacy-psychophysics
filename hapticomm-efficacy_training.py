@@ -32,7 +32,7 @@ s = StimuliEfficacy(n_iteration_per_group)
 s.add_shape(3) 
 s.define_stimuli(randomize=False)
 
-commands = ["q", "a", "z"]
+commands = ["q", "a", "z", "i", "o", "p"]
 
 # -- ABORT/EXIT ROUTINE --
 def key_press(key):
@@ -47,7 +47,15 @@ def key_press(key):
             stim = s.get_stimulus(1)
         elif c == "z":
             stim = s.get_stimulus(2)
-            
+        elif c == "i":
+            stim = {
+                'type': "tap",
+                'nb_actuators': 1,
+                'width': 1,
+                'length': 1,
+                'actuators': ["ff1"]
+            }
+        
         t = stim['type']
         n_act = stim['nb_actuators']
         width = stim['width']
