@@ -1,2 +1,0 @@
-/usr/bin/ar qc libHaptiCommConfiguration.a CMakeFiles/HaptiCommConfiguration.dir/2_src/HaptiCommConfiguration.cpp.o
-/usr/bin/ranlib libHaptiCommConfiguration.a
