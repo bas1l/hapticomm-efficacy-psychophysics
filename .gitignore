@@ -1,13 +1,6 @@
+!data/ ; data/*
+!analysis/ ; analysis/*
 
-analysis/ans-size_residual_fitting_binomial.pdf
-analysis/__pycache__/functions_local.cpython-38.pyc
-analysis/__pycache__/example_anovas.cpython-38.pyc
-analysis/.Rhistory
-analysis/.RData
-analysis/.idea/workspace.xml
-analysis/.idea/vcs.xml
-analysis/.idea/modules.xml
-analysis/.idea/misc.xml
-analysis/.idea/inspectionProfiles/Project_Default.xml
-analysis/.idea/inspectionProfiles/profiles_settings.xml
-analysis/.idea/analysis.iml
+build/*
+sandbox/*
+.idea/*
