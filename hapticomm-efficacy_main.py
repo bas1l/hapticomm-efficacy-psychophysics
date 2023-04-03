@@ -55,9 +55,10 @@ fm.generate_infoFile(expt_info)
 
 # -- SETUP STIMULUS CONTROL --
 s = StimuliEfficacy(n_iteration_per_group)
-s.define_sizes()
-s.define_stimuli()
-n_trials = len(s.stim_list)
+s.define_types_motion()
+s.define_numbers()
+s.generate_set_stimuli()
+n_trials = s.get_n_stimuli()
 
 
 # -- ABORT/EXIT ROUTINE --
@@ -82,17 +83,16 @@ fm.logEvent(time.time()-start, "experiment started")
 while stim_no < n_trials:
     # current stimulus information
     stim = s.get_stimulus(stim_no)
-    t = stim['type']
+    motion_type = stim['type']
     n_act = stim['nb_actuators']
     width = stim['width']
     length = stim['length']
     actuators = stim['actuators']
 
     # write to data file
-    fm.dataWrite([stim_no+1, t, n_act, width, length, actuators])
+    fm.dataWrite([stim_no+1, motion_type, n_act, width, length, actuators])
 
     # send command to the AD5383
-    # TODO
     #  Execute the sequence
     #   - send the type of contact
     #   - send the list of actuators
@@ -100,7 +100,7 @@ while stim_no < n_trials:
     print("\n---")
     input("Press Enter to send a pattern...")
     print("\nPython: send_pattern")
-    hapticomm.send_pattern(t, width, length, actuators)
+    hapticomm.send_pattern(motion_type, width, length, actuators)
     sleep(0.75)
 
     fm.logEvent(

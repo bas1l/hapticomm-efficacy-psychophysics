@@ -1,0 +1,61 @@
+trial;type;size;direction;actuators
+1;app-motion;line;down;[['ff3', 'mf3', 'rf3'], ['ff2', 'mf2', 'rf2'], ['ff1', 'mf1', 'rf1'], ['palm33', 'palm23', 'palm13'], ['palm32', 'palm22', 'palm12'], ['palm31', 'palm21', 'palm11']]
+2;tap-and-hold;point;None;mf3
+3;tap;point;None;mf3
+4;app-motion;line;down;[['p2', 'rf2', 'mf2'], ['p1', 'rf1', 'mf1'], ['palm13', 'palm23', 'palm33'], ['palm12', 'palm22', 'palm32'], ['palm11', 'palm21', 'palm31']]
+5;tap-and-hold;line;None;['p1', 'p2']
+6;tap;point;None;p2
+7;tap;line;None;['p1', 'p2']
+8;tap-and-hold;point;None;b1
+9;app-motion;point;up;['b1', 'palm21', 'palm22', 'palm23', 'rf1', 'rf2', 'rf3']
+10;tap-and-hold;line;None;['palm32', 'palm33', 'mf1']
+11;tap-and-hold;line;None;['palm31', 'b1']
+12;tap;point;None;palm32
+13;app-motion;line;up;[['palm32', 'palm22'], ['palm33', 'palm23'], ['ff1', 'mf1'], ['ff2', 'mf2'], ['ff3', 'mf3']]
+14;tap;point;None;t2
+15;tap-and-hold;line;None;['palm21', 'palm22', 'palm23']
+16;tap;point;None;b1
+17;app-motion;point;up;['palm23', 'mf1', 'mf2', 'mf3']
+18;app-motion;line;down;[['mf1', 'rf1', 'p1'], ['palm33', 'palm23', 'palm13'], ['palm32', 'palm22', 'palm12'], ['palm31', 'palm21', 'palm11']]
+19;tap-and-hold;point;None;p2
+20;tap-and-hold;line;None;['palm33', 'palm32', 'palm31']
+21;app-motion;point;down;['p1', 'palm13', 'palm12', 'palm11']
+22;app-motion;line;down;[['rf3', 'mf3', 'ff3'], ['rf2', 'mf2', 'ff2'], ['rf1', 'mf1', 'ff1'], ['palm13', 'palm23', 'palm33'], ['palm12', 'palm22', 'palm32'], ['palm11', 'palm21', 'palm31']]
+23;app-motion;point;up;['palm11', 'palm12', 'palm13', 'rf1', 'rf2', 'rf3']
+24;tap;line;None;['mf3', 'mf2', 'mf1']
+25;tap-and-hold;line;None;['palm13', 'palm23', 'palm33']
+26;tap;point;None;palm33
+27;tap;line;None;['palm32', 'palm33', 'mf1']
+28;app-motion;point;down;['palm13', 'palm12', 'palm11']
+29;tap-and-hold;point;None;mf1
+30;app-motion;point;down;['ff3', 'ff2', 'ff1', 'palm33', 'palm32', 'palm31', 'b1']
+31;tap;point;None;rf2
+32;app-motion;line;down;[['p2', 'rf2'], ['p1', 'rf1'], ['palm13', 'palm23'], ['palm12', 'palm22'], ['palm11', 'palm21']]
+33;tap;line;None;['palm21', 'palm22', 'palm23']
+34;app-motion;line;up;[['palm12', 'palm22', 'palm32'], ['palm13', 'palm23', 'palm33'], ['p1', 'rf1', 'mf1'], ['p2', 'rf2', 'mf2']]
+35;tap-and-hold;point;None;palm33
+36;tap;line;None;['palm12', 'palm11']
+37;tap;line;None;['palm13', 'palm23', 'palm33']
+38;tap;line;None;['rf1', 'rf2']
+39;tap;point;None;mf1
+40;tap-and-hold;point;None;t1
+41;tap-and-hold;point;None;t2
+42;tap-and-hold;point;None;rf2
+43;app-motion;line;down;[['ff1', 'mf1'], ['palm33', 'palm23'], ['palm32', 'palm22'], ['palm31', 'palm21']]
+44;tap-and-hold;point;None;palm32
+45;tap;line;None;['palm33', 'palm32', 'palm31']
+46;tap-and-hold;line;None;['palm22', 'palm32']
+47;tap;point;None;palm23
+48;tap-and-hold;line;None;['mf3', 'mf2', 'mf1']
+49;tap-and-hold;point;None;palm23
+50;tap;point;None;t1
+51;app-motion;point;down;['rf3', 'rf2', 'rf1', 'palm13', 'palm12', 'palm11']
+52;tap;line;None;['palm31', 'b1']
+53;app-motion;point;up;['palm32', 'palm33', 'mf1', 'mf2', 'mf3']
+54;tap-and-hold;line;None;['rf1', 'rf2']
+55;app-motion;line;up;[['palm21', 'palm11'], ['palm22', 'palm12'], ['palm23', 'palm13'], ['mf1', 'rf1'], ['mf2', 'rf2'], ['mf3', 'rf3']]
+56;app-motion;line;down;[['rf3', 'mf3'], ['rf2', 'mf2'], ['rf1', 'mf1'], ['palm23', 'palm33'], ['palm22', 'palm32'], ['palm21', 'palm31']]
+57;tap-and-hold;line;None;['palm12', 'palm11']
+58;app-motion;point;up;['palm12', 'palm13', 'p1', 'p2']
+59;tap;line;None;['palm22', 'palm32']
+60;app-motion;point;down;['rf2', 'rf1', 'palm23', 'palm22', 'palm21', 'b1']
