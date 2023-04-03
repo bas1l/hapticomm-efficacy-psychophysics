@@ -33,7 +33,7 @@ s.define_types_motion()
 s.define_numbers()
 s.generate_set_stimuli(randomize=False)
 
-commands = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+commands = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
 
 # -- ABORT/EXIT ROUTINE --
 def key_press(key):
@@ -63,6 +63,26 @@ def key_press(key):
             stim = s.get_stimulus(8)
         elif c == "9":
             stim = s.get_stimulus(9)
+        elif c == "q":
+            stim = s.get_stimulus(10)
+        elif c == "w":
+            stim = s.get_stimulus(11)
+        elif c == "e":
+            stim = s.get_stimulus(12)
+        elif c == "r":
+            stim = s.get_stimulus(13)
+        elif c == "t":
+            stim = s.get_stimulus(14)
+        elif c == "y":
+            stim = s.get_stimulus(15)
+        elif c == "u":
+            stim = s.get_stimulus(16)
+        elif c == "i":
+            stim = s.get_stimulus(17)
+        elif c == "o":
+            stim = s.get_stimulus(18)
+        elif c == "p":
+            stim = s.get_stimulus(19)
             
         t = stim['type']
         width = stim['width']
